@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PixTeam Tindouf</title>
+<style>
+  :root {
+    --bg-main: #2a2a2a; /* الطور الرمادي الفخم */
+    --bg-header: #ffffff;
+    --bg-card: rgba(10, 12, 16, 0.94);
+    --border-color: rgba(229, 157, 22, 0.35);
+    --accent-color: #e59d16;
+    --accent-glow: rgba(229, 157, 22, 0.5);
+    --text-white: #ffffff;
+    --text-muted: #cbd5e1;
+    --text-dim: #94a3b8;
+    --status-ok: #e59d16;
+    --status-warn: #e59d16;
+    --status-bad: #ff4d4d;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--bg-main);
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(0, 180, 255, 0.14) 0%, transparent 55%),
+      radial-gradient(circle at 10% 90%, rgba(0, 120, 255, 0.08) 0%, transparent 45%);
+    color: var(--text-white);
+    font: 15px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #brand {
+    text-align: center;
+    padding: 10px 16px;
+    background: var(--bg-header);
+    border-bottom: 2px solid var(--accent-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 16px var(--accent-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .brand-side {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .brand-logo {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 2.5px solid var(--accent-color);
+    box-shadow: 0 0 18px var(--accent-glow);
+    object-fit: cover;
+    vertical-align: middle;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .brand-logo:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(0, 220, 255, 0.95);
+  }
+
+  .btn-tiktok {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(0, 180, 255, 0.15);
+    color: #00e5ff;
+    border: 1.5px solid rgba(0, 200, 255, 0.6);
+    border-radius: 22px;
+    padding: 7px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  }
+
+  .btn-tiktok:hover {
+    background: #00c8ff;
+    color: #000000;
+    border-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 220, 255, 0.9);
+    transform: translateY(-2px);
+  }
+
+  .btn-tiktok svg {
+    vertical-align: middle;
+  }
+
+  #brand b {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--text-white);
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  .main-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-white);
+    margin: 24px 10px 8px;
+    letter-spacing: 0.03em;
+    text-align: center;
+  }
+
+  .sub-title {
+    font-size: 14px;
+    color: var(--accent-color);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  #wrap {
+    max-width: 760px;
+    margin: 10px auto 20px;
+    text-align: center;
+  }
+
+  #state {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    color: var(--status-warn);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  #det {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 6px;
+  }
+
+  #det b {
+    color: var(--text-white);
+    font-weight: 700;
+  }
+
+  #cache {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: 0 0 4px;
+    min-height: 16px;
+  }
+
+  #cache.cacheok {
+    color: var(--status-ok);
+    font-weight: 700;
+  }
+
+  .ok { color: var(--status-ok); font-weight: 700; }
+  .bad { color: var(--status-bad); font-weight: 700; }
+  .warn { color: var(--status-warn); font-weight: 700; }
+
+  .btn-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    background: #0d1117;
+    color: #ffffff;
+    width: 236px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    border: 1.5px solid rgba(0, 180, 255, 0.4);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: inherit;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn:hover, .btn:focus {
+    background: var(--accent-color);
+    color: #000000;
+    border-color: #00e5ff;
+    box-shadow: 0 0 22px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-host {
+    background: linear-gradient(135deg, #0052cc 0%, #00aaff 100%);
+    color: #ffffff;
+    border: 1.5px solid #00e5ff;
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.6);
+    font-weight: 800;
+  }
+
+  .btn-host:hover, .btn-host:focus {
+    background: linear-gradient(135deg, #0077ff 0%, #33ccff 100%);
+    color: #000000;
+    border-color: #ffffff;
+    box-shadow: 0 0 28px rgba(0, 220, 255, 0.95);
+    transform: translateY(-2px);
+  }
+
+  .btn-nav {
+    background: #0a0e16;
+    color: #e2e8f0;
+    border: 1.5px solid rgba(0, 180, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn-nav:hover, .btn-nav:focus {
+    background: #00c8ff;
+    color: #000000;
+    border-color: #ffffff;
+    box-shadow: 0 0 24px rgba(0, 200, 255, 0.85);
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+<div id="brand">
+  <div class="brand-side">
+    <a href="https://www.tiktok.com/@pixteam37" target="_blank" class="brand-logo-link" title="PRO-GAME TikTok">
+      <img src="logo_raw.png" alt="PRO-GAME Logo" class="brand-logo">
+    </a>
+    <a href="https://www.tiktok.com/@pixteam37" target="_blank" class="btn-tiktok">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.86 4.45V11.8a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-3.04-1.23z"/></svg>
+      <span>TikTok</span>
+    </a>
+  </div>
+
+  <b>PixTeam</b>
+
+  <div class="brand-side">
+    <a href="https://www.tiktok.com/@pixteam37" target="_blank" class="btn-tiktok">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.86 4.45V11.8a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-3.04-1.23z"/></svg>
+      <span>TikTok</span>
+    </a>
+    <a href="https://www.tiktok.com/@pixteam37" target="_blank" class="brand-logo-link" title="YOVA FLASH TikTok">
+      <img src="logo2.jpeg" alt="YOVA FLASH Logo" class="brand-logo">
+    </a>
+  </div>
+</div>
+
+<h1 class="main-title">PS4 13.02 - 13.52 FW Exploit Host</h1>
+<div class="sub-title">PixTeam WebKit &amp; Kernel Exploit</div>
+
+<div id="wrap">
+  <div id="state">Detecting Firmware...</div>
+  <div id="det"></div>
+  <div id="cache"></div>
+</div>
+
+<div style="text-align:center; margin: 15px auto 40px;">
+  <div class="btn-menu">
+    <button type="button" class="btn btn-host" onclick="go()" onmouseover="setState('PS4 13.02 - 13.52 Host (Auto Exploit &amp; Payload)', 'warn')" onmouseout="setState('Ready &middot; Select your option below', 'ok')">⚡ 13.02 - 13.52 Host</button>
+    <a href="g2all/index.html" class="btn btn-nav" onmouseover="setState('Switch to Multi-Firmware Host (5.05 - 13.00 FW)', 'warn')" onmouseout="setState('Ready &middot; Select your option below', 'ok')">👑 5.05 - 13.00 FW</a>
+  </div>
+</div>
+
+<script>
+(function () {
+    var stateEl = document.getElementById("state");
+    var detEl = document.getElementById("det");
+    var cacheEl = document.getElementById("cache");
+    function setState(t, c) { stateEl.innerHTML = t; stateEl.className = c || ""; }
+    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    window.setState = setState;
+    var params = new URLSearchParams(location.search);
+
+    // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
+    // own kernel-table-present gate, so this is UX only -- an unlisted firmware
+    // can still be launched with a tap. KEEP IN SYNC with ps4_offsets.js: add a
+    // fwnum here in the SAME commit that fills that firmware's kernel RVAs.
+    // The PS4 reports its minor as two hex digits in the UA (13.52 -> minor 0x52).
+    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 }; // all measured on hardware
+
+    var key = null, fwnum = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    if (m) {
+        var ms = parseInt(m[2], 16).toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
+    }
+
+    var forced = params.get("force") === "1";
+    var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
+    detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
+        + (supported ? " &middot; <b>supported</b>"
+                     : " &middot; not in this build's kernel table");
+
+    var target = "jb.html" + location.search;
+    function go() { setState("loading jailbreak...", "warn"); location.replace(target); }
+    window.go = go;
+
+    function waitForTap(msg, action) {
+        setState(msg, "warn");
+        function fire() {
+            window.removeEventListener("click", fire);
+            window.removeEventListener("keydown", fire);
+            action();
+        }
+        window.addEventListener("click", fire);
+        window.addEventListener("keydown", fire);
+    }
+
+    if (!supported) {
+        setState("Select an option below", "warn");
+    } else {
+        setState("Ready &middot; Select your option below", "ok");
+    }
+
+    var ac = window.applicationCache;
+    if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        // No cache manifest active
+    } else if (!navigator.onLine) {
+        setCache("offline -- from cache", true);
+    } else if (ac.status === ac.IDLE) {
+        setCache("cached", true);
+    } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        setCache("update downloaded", true);
+        waitForTap("UPDATE READY -- press X or tap to reload",
+                   function () { location.reload(); });
+    } else {
+        setCache("checking cache...");
+        ac.addEventListener("downloading",
+            function () { setCache("caching for offline (first run)..."); }, false);
+        ac.addEventListener("progress", function (e) {
+            if (e && e.total)
+                setCache("caching " + Math.round((e.loaded / e.total) * 100) + "%");
+        }, false);
+        ac.addEventListener("cached", function () {
+            setCache("cached for offline use", true);
+            setState("Ready &middot; Select your option below", "ok");
+        }, false);
+        ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            setCache("update downloaded", true);
+            waitForTap("UPDATE READY -- press X or tap to reload",
+                       function () { location.reload(); });
+        }, false);
+        ac.addEventListener("noupdate", function () {
+            setCache("cached -- offline ready", true);
+        }, false);
+        ac.addEventListener("error", function () {
+            setCache("cache unavailable");
+        }, false);
+        ac.addEventListener("obsolete", function () {
+            setCache("cache obsolete");
+        }, false);
+    }
+})();
+</script>
+</body>
+</html>
